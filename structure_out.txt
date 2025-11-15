@@ -1,0 +1,8 @@
+典型的微调后输出模型的构成
+
+./qlora-out/
+├── checkpoint-xxx/          # 训练检查点
+├── adapter_config.json      # LoRA适配器配置
+├── adapter_model.bin        # LoRA权重文件（主要参数）
+├── README.md               # 模型说明
+└── special_tokens_map.json # 特殊token映射

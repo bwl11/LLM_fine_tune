@@ -1,19 +1,19 @@
 # 模型配置
-base_model: meta-llama/Llama-2-7b-hf # Hugging Face 上的模型ID
-model_type: LlamaForCausalLM
-tokenizer_type: LlamaTokenizer
+base_model: Qwen/Qwen2-1.5B-Instruct # Hugging Face 上的模型ID
+model_type: Qwen2ForCausalLM
+tokenizer_type: Qwen2Tokenizer
 
 # 数据配置
 datasets:
-  - path: dataset.jsonl # 你的数据文件路径
-    type: jsonl
+  - path: ../data/testdata.jsonl # 你的数据文件路径
+    type: completion
 dataset_prepared_path: last_run_prepared # 预处理后的数据缓存路径
 val_set_size: 0.1 # 验证集比例（10%）
 output_dir: ./qlora-out # 模型输出路径
 
 # 训练配置
 adapter: qlora # 使用 QLoRA
-lora_model_dir: ./qlora-out # 如果加载现有LoRA，请指定路径
+lora_model_dir:  # 如果有预训练的 LoRA 模型，可以在这里指定路径
 sequence_len: 4096 # 序列长度
 
 # LoRA 配置
@@ -46,9 +46,13 @@ bf16: true # 如果你的显卡支持（如 Ampere 架构），开启以加速�
 tf32: true # 同样用于加速
 gradient_checkpointing: true # 用计算时间换显存
 early_stopping_patience: 3
-load_in_8bit: true # QLoRA 关键设置
-load_in_4bit: false
+load_in_8bit: false # QLoRA 关键设置
+load_in_4bit: true
 
 # 其他
-wandb_project: "my-axolotl-project" # 可选，用于实验跟踪
-wandb_watch: false
+wandb_mode: "disabled"
+wandb_watch: "false"
+wandb_project: ""
+wandb_entity: ""
+wandb_name: ""
+report_to: "none"
