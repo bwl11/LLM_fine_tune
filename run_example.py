@@ -6,25 +6,25 @@ import torch
 model_name = "Qwen/Qwen2-1.5B-Instruct"
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    torch_dtype=torch.bfloat16,
+    dtype=torch.bfloat16,
     device_map="auto"
 )
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 # 加载LoRA适配器
-model = PeftModel.from_pretrained(model, "./qlora-out")
+model = PeftModel.from_pretrained(model, "./qlora-saki-out")
 
 # 设置tokenizer（Qwen模型需要）
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "left"  # 对于生成任务建议使用left padding
 
 # 进行推理
-text = "你好，请介绍一下你自己"
+text = ""
 inputs = tokenizer(text, return_tensors="pt").to(model.device)  # 移动到GPU
 
 outputs = model.generate(
     **inputs,
-    max_new_tokens=100,
+    max_new_tokens=3000,
     do_sample=True,
     temperature=0.7,
     top_p=0.9

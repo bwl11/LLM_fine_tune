@@ -1,0 +1,58 @@
+# 模型配置
+base_model: Qwen/Qwen2-1.5B-Instruct # Hugging Face 上的模型ID
+model_type: Qwen2ForCausalLM
+tokenizer_type: Qwen2Tokenizer
+
+# 数据配置
+datasets:
+  - path: ../data/saki_train_data.jsonl # 你的数据文件路径
+    type: completion
+dataset_prepared_path: last_run_prepared # 预处理后的数据缓存路径
+val_set_size: 0.1 # 验证集比例（10%）
+output_dir: ./qlora-saki-out # 模型输出路径
+
+# 训练配置
+adapter: qlora # 使用 QLoRA
+lora_model_dir:  # 如果有预训练的 LoRA 模型，可以在这里指定路径
+sequence_len: 4096 # 序列长度
+
+# LoRA 配置
+lora_r: 32
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target_modules: # 针对 Llama 模型的关键模块
+- q_proj
+- k_proj
+- v_proj
+- o_proj
+- gate_proj
+- up_proj
+- down_proj
+
+# 训练参数
+micro_batch_size: 8 # 根据你的GPU调整
+gradient_accumulation_steps: 4 # 根据你的GPU调整
+num_epochs: 10
+learning_rate: 0.0002
+optimizer: adamw_bnb_8bit
+lr_scheduler: cosine
+warmup_steps: 10
+eval_steps: 50
+save_steps: 200
+logging_steps: 10
+
+# 系统配置
+bf16: true # 如果你的显卡支持（如 Ampere 架构），开启以加速并节省内存
+tf32: true # 同样用于加速
+gradient_checkpointing: true # 用计算时间换显存
+early_stopping_patience: 3
+load_in_8bit: false # QLoRA 关键设置
+load_in_4bit: true
+
+# 其他
+wandb_mode: "disabled"
+wandb_watch: "false"
+wandb_project: ""
+wandb_entity: ""
+wandb_name: ""
+report_to: "none"
