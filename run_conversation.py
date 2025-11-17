@@ -15,7 +15,7 @@ print("模型和Tokenizer加载完成。")
 
 # 加载LoRA适配器
 print("正在加载LoRA适配器...")
-model = PeftModel.from_pretrained(model, "./qlora-saki-out")
+model = PeftModel.from_pretrained(model, "axolotl/qlora-saki-out")
 print("LoRA适配器加载完成。")
 
 # 设置tokenizer（Qwen模型需要）
